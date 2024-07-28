@@ -1,0 +1,26 @@
+@layer utilities {
+    /* 只显示一行文字, 溢出部分以省略号代替 */
+    .tw-ellips {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        word-break: break-all;
+        white-space: nowrap;
+    }
+
+    /* 鼠标移动到文字或链接出现动画下划线 */
+    .tw-animate-decoration {
+        background: linear-gradient(var(--font-color-link-hover), var(--font-color-link-hover)) 0
+            100% / 0 1px no-repeat;
+        transition: background-size 0.2s ease-out;
+    }
+
+    /* 默认下划线 */
+    .tw-animate-decoration:hover {
+        background-size: 100% 1px;
+    }
+
+    /* 粗下划线 */
+    .tw-animate-decoration-lg:hover {
+        background-size: 100% 2px;
+    }
+}
