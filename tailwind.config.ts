@@ -1,8 +1,8 @@
 import type { Config } from 'tailwindcss';
 
 const config = {
-    content: ['./src/**/*.{ts,tsx}'],
-    prefix: 'root-',
+    content: ['./**/*.{ts,tsx}'],
+    prefix: 'tw-',
     theme: {
         extend: {
             boxShadow: {

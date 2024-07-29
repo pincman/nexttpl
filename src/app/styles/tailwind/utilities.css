@@ -1,6 +1,8 @@
 @layer utilities {
     /* 只显示一行文字, 溢出部分以省略号代替 */
     .tw-ellips {
+        display: inline-block;
+        max-width: 100%;
         overflow: hidden;
         text-overflow: ellipsis;
         word-break: break-all;

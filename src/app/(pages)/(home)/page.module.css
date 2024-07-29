@@ -51,7 +51,7 @@
             }
 
             & > .title > a {
-                display: block;
+                @apply tw-max-w-full tw-block tw-overflow-hidden;
             }
 
             & > .title > a > h2 {

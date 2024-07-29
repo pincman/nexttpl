@@ -1,4 +1,7 @@
 import { ChevronLeftIcon, ChevronRightIcon, DotsHorizontalIcon } from '@radix-ui/react-icons';
+import clsx from 'clsx';
+import { isNil } from 'lodash';
+import Link from 'next/link';
 import * as React from 'react';
 
 import { ButtonProps, buttonVariants } from '@/app/_components/shadcn/button';
@@ -32,20 +35,30 @@ PaginationItem.displayName = 'PaginationItem';
 
 type PaginationLinkProps = {
     isActive?: boolean;
+    // 添加按钮禁用功能
+    disabled?: boolean;
+    // 自定义辅助显示文字
+    'aria-label'?: string;
+    // 自定义按钮文字
+    text?: string;
 } & Pick<ButtonProps, 'size'> &
     React.ComponentProps<'a'>;
 
 const PaginationLink = ({ className, isActive, size = 'icon', ...props }: PaginationLinkProps) => (
-    <a
+    // 替换a标签为next.js的Link组件
+    <Link
         aria-current={isActive ? 'page' : undefined}
         className={cn(
             buttonVariants({
                 variant: isActive ? 'outline' : 'ghost',
                 size,
             }),
+            clsx({ 'tw-pointer-events-none tw-opacity-50': props.disabled }),
             className,
         )}
         {...props}
+        aria-disabled={props.disabled}
+        href={isNil(props.href) ? ':' : props.href}
     />
 );
 PaginationLink.displayName = 'PaginationLink';

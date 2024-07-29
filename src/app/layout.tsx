@@ -1,3 +1,4 @@
+/* eslint-disable import/order */
 import type { Metadata } from 'next';
 import { FC, PropsWithChildren } from 'react';
 
