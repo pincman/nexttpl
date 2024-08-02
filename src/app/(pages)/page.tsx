@@ -1,22 +1,31 @@
+import clsx from 'clsx';
 import { isNil } from 'lodash';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FC } from 'react';
-import { AiOutlineCalendar, AiOutlineDelete } from 'react-icons/ai';
+import { AiOutlineCalendar } from 'react-icons/ai';
 
-import { Button } from '@/app/_components/shadcn/button';
-import { Tools } from '@/app/_components/tools';
+import { IPaginateQueryProps } from '@/app/_components/paginate/types';
 import { queryPostPaginate } from '@/app/actions/post';
+
+import { Tools } from '../_components/home/tools';
+
+import { PostDelete } from '../_components/post/delete';
+
+import { PostEditButton } from '../_components/post/edit-button';
+import { PostListPaginate } from '../_components/post/paginate';
 
 import $styles from './page.module.css';
 
-const HomePage: FC<{ searchParams: Record<string, any> }> = async ({ searchParams }) => {
-    const { page = 1, limit = 8 } = searchParams;
-    const { items } = await queryPostPaginate({ page: Number(page), limit });
+const HomePage: FC<{ searchParams: IPaginateQueryProps }> = async ({ searchParams }) => {
+    const { page: currentPage, limit = 8 } = searchParams;
+    // 当没有传入当前页或当前页小于1时，设置为第1页
+    const page = isNil(currentPage) || Number(currentPage) < 1 ? 1 : Number(currentPage);
+    const { items, meta } = await queryPostPaginate({ page: Number(page), limit });
     return (
         <div className={$styles.container}>
             <Tools />
-            {items.length > 0 ? (
+            {page <= meta.totalPages ? (
                 <div className={$styles.list}>
                     {items.map((item) => (
                         <div
@@ -25,7 +34,7 @@ const HomePage: FC<{ searchParams: Record<string, any> }> = async ({ searchParam
                             style={{ '--bg-img': `url(${item.thumb})` } as any}
                             key={item.id}
                         >
-                            <Link className={$styles.thumb} href="#">
+                            <Link className={$styles.thumb} href={`/posts/${item.id}`}>
                                 <Image
                                     src={item.thumb}
                                     alt={item.title}
@@ -35,8 +44,8 @@ const HomePage: FC<{ searchParams: Record<string, any> }> = async ({ searchParam
                                 />
                             </Link>
                             <div className={$styles.content}>
-                                <div className={$styles.title}>
-                                    <Link href="#">
+                                <div className={clsx($styles.title, 'tw-hover')}>
+                                    <Link href={`/posts/${item.id}`}>
                                         <h2 className="tw-ellips tw-animate-decoration tw-animate-decoration-lg">
                                             {item.title}
                                         </h2>
@@ -55,14 +64,8 @@ const HomePage: FC<{ searchParams: Record<string, any> }> = async ({ searchParam
                                         <time className="tw-ellips">2022年6月22日</time>
                                     </div>
                                     <div className={$styles.meta}>
-                                        <Button className="tw-mr-3">
-                                            <AiOutlineDelete className="tw-mr-2" />
-                                            编辑
-                                        </Button>
-                                        <Button variant="outline">
-                                            <AiOutlineDelete className="tw-mr-2" />
-                                            删除
-                                        </Button>
+                                        <PostEditButton id={item.id} />
+                                        <PostDelete id={item.id} />
                                     </div>
                                 </div>
                             </div>
@@ -70,9 +73,11 @@ const HomePage: FC<{ searchParams: Record<string, any> }> = async ({ searchParam
                     ))}
                 </div>
             ) : (
-                <div className={$styles.noData}>你已经超过最底页了，都是404了，请回首页吧</div>
+                <div className={$styles.noData}>
+                    你已经超过最底页了，都是404了，请点击LOGO回首页吧
+                </div>
             )}
-            {/* {items.length > 0 && <PostListPaginate limit={8} />} */}
+            {meta.totalPages > 1 && <PostListPaginate limit={8} page={page} />}
         </div>
     );
 };

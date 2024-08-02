@@ -1,28 +1,38 @@
 @layer utilities {
+    /* 鼠标移动到文字或链接加深颜色 */
+    .tw-hover {
+        @apply hover:tw-text-[var(--font-color-link-hover)];
+    }
+
     /* 只显示一行文字, 溢出部分以省略号代替 */
     .tw-ellips {
-        display: inline-block;
-        max-width: 100%;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        word-break: break-all;
-        white-space: nowrap;
+        @apply tw-inline-block tw-overflow-hidden tw-max-w-full tw-whitespace-nowrap tw-text-ellipsis tw-break-all;
     }
 
     /* 鼠标移动到文字或链接出现动画下划线 */
     .tw-animate-decoration {
-        background: linear-gradient(var(--font-color-link-hover), var(--font-color-link-hover)) 0
-            100% / 0 1px no-repeat;
-        transition: background-size 0.2s ease-out;
-    }
+        background: linear-gradient(var(--font-color-link-hover), var(--font-color-link-hover)) 0%
+            100% / 0% 1px no-repeat;
+        transition: background-size ease-out 200ms;
 
-    /* 默认下划线 */
-    .tw-animate-decoration:hover {
-        background-size: 100% 1px;
+        &:not(:focus):hover {
+            background-size: 100% 1px;
+        }
     }
 
     /* 粗下划线 */
-    .tw-animate-decoration-lg:hover {
+    .tw-animate-decoration-lg:not(:focus):hover {
         background-size: 100% 2px;
+    }
+
+    /* 取消下划线 */
+    .tw-none-animate-decoration {
+        background-size: 0 !important;
+        transition: none !important;
+
+        &:hover,
+        &:not(:focus):hover {
+            background-size: 100% 0 !important;
+        }
     }
 }

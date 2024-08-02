@@ -35,17 +35,13 @@ PaginationItem.displayName = 'PaginationItem';
 
 type PaginationLinkProps = {
     isActive?: boolean;
-    // 添加按钮禁用功能
     disabled?: boolean;
-    // 自定义辅助显示文字
     'aria-label'?: string;
-    // 自定义按钮文字
     text?: string;
 } & Pick<ButtonProps, 'size'> &
     React.ComponentProps<'a'>;
 
 const PaginationLink = ({ className, isActive, size = 'icon', ...props }: PaginationLinkProps) => (
-    // 替换a标签为next.js的Link组件
     <Link
         aria-current={isActive ? 'page' : undefined}
         className={cn(
@@ -65,41 +61,53 @@ PaginationLink.displayName = 'PaginationLink';
 
 const PaginationPrevious = ({
     className,
+    text,
+    'aria-label': ariaLabel,
     ...props
 }: React.ComponentProps<typeof PaginationLink>) => (
     <PaginationLink
-        aria-label="Go to previous page"
+        aria-label={ariaLabel ?? 'Go to previous page'}
         size="default"
         className={cn('tw-gap-1 tw-pl-2.5', className)}
         {...props}
     >
         <ChevronLeftIcon className="tw-h-4 tw-w-4" />
-        <span>Previous</span>
+        <span>{text ?? 'Previous'}</span>
     </PaginationLink>
 );
 PaginationPrevious.displayName = 'PaginationPrevious';
 
-const PaginationNext = ({ className, ...props }: React.ComponentProps<typeof PaginationLink>) => (
+const PaginationNext = ({
+    className,
+    text,
+    'aria-label': ariaLabel,
+    ...props
+}: React.ComponentProps<typeof PaginationLink>) => (
     <PaginationLink
-        aria-label="Go to next page"
+        aria-label={ariaLabel ?? 'Go to next page'}
         size="default"
         className={cn('tw-gap-1 tw-pr-2.5', className)}
         {...props}
     >
-        <span>Next</span>
+        <span>{text ?? 'Next'}</span>
         <ChevronRightIcon className="tw-h-4 tw-w-4" />
     </PaginationLink>
 );
 PaginationNext.displayName = 'PaginationNext';
 
-const PaginationEllipsis = ({ className, ...props }: React.ComponentProps<'span'>) => (
+const PaginationEllipsis = ({
+    className,
+    text,
+    'aria-label': ariaLabel,
+    ...props
+}: React.ComponentProps<'span'> & { text?: string }) => (
     <span
         aria-hidden
         className={cn('tw-flex tw-h-9 tw-w-9 tw-items-center tw-justify-center', className)}
         {...props}
     >
         <DotsHorizontalIcon className="tw-h-4 tw-w-4" />
-        <span className="tw-sr-only">More pages</span>
+        <span className="tw-sr-only">{text ?? 'More pages'}</span>
     </span>
 );
 PaginationEllipsis.displayName = 'PaginationEllipsis';

@@ -19,8 +19,4 @@
     a {
         @apply tw-text-[var(--font-color-link)];
     }
-
-    a:hover {
-        @apply tw-text-[var(--font-color-link-hover)];
-    }
 }
