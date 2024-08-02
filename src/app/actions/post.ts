@@ -16,7 +16,8 @@ import { paginate } from '@/database/utils';
 export const queryPostPaginate = async (
     options?: PaginateOptions,
 ): Promise<PaginateReturn<IPost>> => {
-    const posts = await readDbFile();
+    // 此处使用倒序,以便新增的文章可以排在最前面
+    const posts = (await readDbFile()).reverse();
     return paginate(posts, { page: 1, limit: 8, ...options });
 };
 
