@@ -16,7 +16,12 @@ import { paginateTransform } from '@/libs/db/utils';
 export const queryPostPaginate = async (
     options?: PaginateOptions,
 ): Promise<PaginateReturn<Post>> => {
-    const data = await db.post.paginate({ page: 1, limit: 8, ...options });
+    const data = await db.post.paginate({
+        orderBy: [{ updatedAt: 'desc' }, { createdAt: 'desc' }],
+        page: 1,
+        limit: 8,
+        ...options,
+    });
     return paginateTransform(data);
 };
 
@@ -69,7 +74,7 @@ export const updatePostItem = async (
  */
 export const deletePostItem = async (id: string): Promise<Post> => {
     const item = await db.post.findUnique({ where: { id } });
-    db.post.delete({ where: { id } });
+    await db.post.delete({ where: { id } });
     revalidateTag('posts');
     return item;
 };

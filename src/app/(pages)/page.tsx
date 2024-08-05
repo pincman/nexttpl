@@ -8,6 +8,8 @@ import { AiOutlineCalendar } from 'react-icons/ai';
 import { IPaginateQueryProps } from '@/app/_components/paginate/types';
 import { queryPostPaginate } from '@/app/actions/post';
 
+import { formatChineseTime } from '@/libs/time';
+
 import { Tools } from '../_components/home/tools';
 
 import { PostDelete } from '../_components/post/delete';
@@ -61,7 +63,11 @@ const HomePage: FC<{ searchParams: IPaginateQueryProps }> = async ({ searchParam
                                         <span>
                                             <AiOutlineCalendar />
                                         </span>
-                                        <time className="tw-ellips">2022年6月22日</time>
+                                        <time className="tw-ellips">
+                                            {!isNil(item.updatedAt)
+                                                ? formatChineseTime(item.updatedAt)
+                                                : formatChineseTime(item.createdAt)}
+                                        </time>
                                     </div>
                                     <div className={$styles.meta}>
                                         <PostEditButton id={item.id} />

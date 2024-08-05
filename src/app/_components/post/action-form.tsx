@@ -76,10 +76,8 @@ export const PostActionForm: FC<PostCreateFormProps | PostUpdateFormProps> = (pr
                     : props.item.body,
             // 创建文章时,默认摘要为空;更新文章时,默认摘要为文章原来的摘要
             summary: props.type === 'create' ? undefined : props.item.summary,
-            // 创建文章时,默认关键字为空;更新文章时,如果文章原来存在关键词,则用逗号把关键词数组连接为一个字符串作为默认关键词.如果原来不存在则为空
-            keywords:
-                // eslint-disable-next-line no-nested-ternary
-                props.type === 'create' ? undefined : props.item.keywords,
+            // 创建文章时,默认关键字为空;更新文章时,默认摘要为文章原来的关键字
+            keywords: props.type === 'create' ? undefined : props.item.keywords,
         },
     });
     return (

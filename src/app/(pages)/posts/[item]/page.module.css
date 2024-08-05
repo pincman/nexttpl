@@ -23,5 +23,17 @@
         & > .title {
             @apply tw-my-2;
         }
+
+        & > .meta {
+            @apply tw-flex tw-my-2 tw-justify-between;
+
+            & > div {
+                @apply tw-flex tw-items-center;
+            }
+
+            & time {
+                @apply tw-ml-2;
+            }
+        }
     }
 }
