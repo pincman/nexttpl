@@ -1,15 +1,15 @@
 'use client';
 
-import { isNil, omit, trim } from 'lodash';
+import { Post } from '@prisma/client';
+import { omit } from 'lodash';
 import { useRouter } from 'next/navigation';
 import { FC, useCallback } from 'react';
 
 import { useForm } from 'react-hook-form';
 
 import { createPostItem, updatePostItem } from '@/app/actions/post';
-import { IPost } from '@/database/types';
-import { faker } from '@/database/utils';
 
+import { faker } from '@/libs/db/utils';
 import { getRandomInt } from '@/libs/random';
 
 import { Button } from '../shadcn/button';
@@ -32,23 +32,17 @@ export const PostActionForm: FC<PostCreateFormProps | PostUpdateFormProps> = (pr
     // 数据提交处理函数
     const submitHandle = useCallback(
         async (data: PostCreateData | PostUpdateData) => {
-            let post: IPost;
+            let post: Post;
             try {
-                // 在表单中关键词是一个使用逗号分割的字符串
-                // 在此处需要用逗号切割成数组再提交
-                const keywords: string[] | undefined =
-                    !isNil(data.keywords) && data.keywords.length
-                        ? data.keywords.split(',').map((word) => trim(word, ' '))
-                        : undefined;
                 post =
                     // 更新文章
                     props.type === 'update'
                         ? await updatePostItem(
                               (data as PostUpdateData).id,
-                              omit({ ...data, keywords }, ['id']),
+                              omit(data as PostUpdateData, ['id']),
                           )
                         : // 创建文章
-                          await createPostItem(omit({ ...(data as PostCreateData), keywords }));
+                          await createPostItem(data as PostCreateData);
             } catch (error) {
                 throw new Error(error as string);
             }
@@ -85,11 +79,7 @@ export const PostActionForm: FC<PostCreateFormProps | PostUpdateFormProps> = (pr
             // 创建文章时,默认关键字为空;更新文章时,如果文章原来存在关键词,则用逗号把关键词数组连接为一个字符串作为默认关键词.如果原来不存在则为空
             keywords:
                 // eslint-disable-next-line no-nested-ternary
-                props.type === 'create'
-                    ? undefined
-                    : !isNil(props.item.keywords)
-                      ? props.item.keywords.join(',')
-                      : undefined,
+                props.type === 'create' ? undefined : props.item.keywords,
         },
     });
     return (

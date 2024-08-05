@@ -1,4 +1,4 @@
-import { IPost } from '@/database/types';
+import { Post, Prisma } from '@prisma/client';
 
 /**
  * 文章创建表单组件参数
@@ -17,15 +17,15 @@ export interface PostUpdateFormProps {
     // 提交按钮的文章
     submitText: string;
     // 原来的文章数据，用于与表单中编辑后的新数据合并，然后更新
-    item: IPost;
+    item: Post;
 }
 
 /**
  * 文章创建表单处理函数的参数类型
  */
-export type PostCreateData = Omit<IPost, 'id' | 'keywords'> & { keywords?: string };
+export type PostCreateData = Prisma.PostCreateInput;
 
 /**
  * 文章创建表单更新函数的参数类型
  */
-export type PostUpdateData = Partial<PostCreateData> & { id: string };
+export type PostUpdateData = Partial<Omit<Post, 'id'>> & { id: string };

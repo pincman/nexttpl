@@ -4,7 +4,7 @@
     "private": true,
     "scripts": {
         "------------------ app command": "----",
-        "dev": "rimraf src/database/db.json && next dev --turbo",
+        "dev": "next dev --turbo",
         "build": "next build",
         "start": "next start",
         "------------------ lint command": "----",
@@ -12,11 +12,23 @@
         "lint:es": "next lint --fix",
         "lint:style": "stylelint \"**/*.css\" --fix --cache --cache-location node_modules/.cache/stylelint/",
         "------------------ ui command": "----",
-        "addsc": "pnpm dlx shadcn-ui@latest add -c ./src/app"
+        "addsc": "pnpm dlx shadcn-ui@latest add -c ./src/app",
+        "------------------ db command": "----",
+        "dbg": "cross-env NODE_ENV=development prisma generate",
+        "dbp": "cross-env NODE_ENV=development prisma db push",
+        "dbmc": "cross-env NODE_ENV=development prisma migrate dev --create-only --skip-generate",
+        "dbm": "cross-env NODE_ENV=development prisma migrate dev --skip-seed",
+        "dbmr": "cross-env NODE_ENV=development prisma migrate reset -f --skip-seed",
+        "dbms": "cross-env NODE_ENV=development prisma migrate dev",
+        "dbmrs": "cross-env NODE_ENV=development prisma migrate reset -f",
+        "dbs": "prisma db seed",
+        "dbmd": "cross-env NODE_ENV=production prisma migrate deploy",
+        "dbo": "prisma studio"
     },
     "dependencies": {
         "@faker-js/faker": "^8.4.1",
         "@hookform/resolvers": "^3.9.0",
+        "@prisma/client": "5.17.0",
         "@radix-ui/react-alert-dialog": "^1.1.1",
         "@radix-ui/react-dialog": "^1.1.1",
         "@radix-ui/react-icons": "^1.3.0",
@@ -27,6 +39,7 @@
         "lodash": "^4.17.21",
         "micromatch": "^4.0.7",
         "next": "14.2.5",
+        "prisma-paginate": "^5.2.1",
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
         "react-hook-form": "^7.52.1",
@@ -44,6 +57,7 @@
         "@types/uuid": "^10.0.0",
         "@typescript-eslint/eslint-plugin": "^7.17.0",
         "autoprefixer": "^10.4.19",
+        "cross-env": "^7.0.3",
         "eslint": "^8.57.0",
         "eslint-config-airbnb": "^19.0.4",
         "eslint-config-airbnb-typescript": "^18.0.0",
@@ -61,6 +75,7 @@
         "postcss-nested": "^6.2.0",
         "postcss-nesting": "^12.1.5",
         "prettier": "^3.3.3",
+        "prisma": "^5.17.0",
         "react-icons": "^5.2.1",
         "rimraf": "^6.0.1",
         "stylelint": "^16.7.0",
@@ -69,6 +84,8 @@
         "stylelint-config-standard": "^36.0.1",
         "stylelint-prettier": "^5.0.2",
         "tailwindcss": "^3.4.7",
+        "ts-node": "^10.9.2",
+        "tsconfig-paths": "^4.2.0",
         "typescript": "^5.5.4"
     },
     "pnpm": {
@@ -78,5 +95,9 @@
                 "eslint-plugin-unused-imports"
             ]
         }
+    },
+    "prisma": {
+        "schema": "src/database/schema",
+        "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} -r tsconfig-paths/register src/database/seed/index.ts"
     }
 }
